@@ -19,8 +19,13 @@ import FavouritesScreen from '../screens/FavouritesScreen';
 // Calculator screens — electrical
 import VoltageDropCalculator from '../screens/calculators/VoltageDropCalculator';
 import WireGaugeCalculator from '../screens/calculators/WireGaugeCalculator';
+import MotorVFDCalculator from '../screens/calculators/MotorVFDCalculator';
 
-// Placeholder screens for upcoming calculators (WFD-246+)
+// Calculator screens — CNC
+import CNCFeedSpeedCalculator from '../screens/calculators/CNCFeedSpeedCalculator';
+import PunchTonnageCalculator from '../screens/calculators/PunchTonnageCalculator';
+
+// Placeholder screens for upcoming calculators
 import { ComingSoonScreen } from '../screens/ComingSoonScreen';
 
 const Tab = createBottomTabNavigator();
@@ -52,12 +57,24 @@ function CalculatorsStack() {
         component={WireGaugeCalculator}
         options={{ title: '🔌 Wire Gauge' }}
       />
-      {/* Coming soon placeholders — filled in next build cycles */}
+      {/* Electrical calculators — implemented */}
       <Stack.Screen
         name="MotorVFDCalculator"
-        children={(props) => <ComingSoonScreen {...props} title="Motor & VFD Calculator" emoji="🔁" />}
+        component={MotorVFDCalculator}
         options={{ title: '🔁 Motor & VFD' }}
       />
+      {/* CNC calculators — implemented */}
+      <Stack.Screen
+        name="CNCFeedSpeedCalculator"
+        component={CNCFeedSpeedCalculator}
+        options={{ title: '🔩 CNC Feed & Speed' }}
+      />
+      <Stack.Screen
+        name="PunchTonnageCalculator"
+        component={PunchTonnageCalculator}
+        options={{ title: '🏋️ Punch Tonnage' }}
+      />
+      {/* Coming soon placeholders — WFD-249+ */}
       <Stack.Screen
         name="ThreePhaseCalculator"
         children={(props) => <ComingSoonScreen {...props} title="3-Phase Power Calculator" emoji="3️⃣" />}
@@ -67,16 +84,6 @@ function CalculatorsStack() {
         name="OhmsLawCalculator"
         children={(props) => <ComingSoonScreen {...props} title="Ohm's Law Calculator" emoji="🔦" />}
         options={{ title: "🔦 Ohm's Law" }}
-      />
-      <Stack.Screen
-        name="CNCFeedSpeedCalculator"
-        children={(props) => <ComingSoonScreen {...props} title="CNC Feed & Speed Calculator" emoji="🔩" />}
-        options={{ title: '🔩 CNC Feed & Speed' }}
-      />
-      <Stack.Screen
-        name="PunchTonnageCalculator"
-        children={(props) => <ComingSoonScreen {...props} title="Punch Tonnage Calculator" emoji="🏋️" />}
-        options={{ title: '🏋️ Punch Tonnage' }}
       />
       <Stack.Screen
         name="PressBrakeCalculator"

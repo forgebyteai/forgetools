@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Colors, Spacing, Typography, Radius } from '../../lib/theme';
 import ResultBox from '../../components/ResultBox';
+import InfoBox from '../../components/InfoBox';
 import { calcVoltageDrop, WIRE_DATA } from '../../lib/calculations';
 import { saveFavourite, addRecent } from '../../lib/storage';
 
@@ -63,6 +64,11 @@ export default function VoltageDropCalculator() {
           <Text style={styles.title}>Voltage Drop</Text>
           <Text style={styles.subtitle}>AS/NZS 3008.1.1 · Single & 3-Phase</Text>
         </View>
+
+        {/* Help */}
+        <InfoBox
+          body={'Calculates voltage drop along a cable run using AS/NZS 3008.1.1 resistance values.\n\n• Single-phase: loop resistance = 2 × length × R/km\n• Three-phase: loop resistance = √3 × length × R/km\n\nLimits: ≤2.5% for sub-mains (feeders), ≤5% for final sub-circuits.'}
+        />
 
         {/* Wire Size Selector */}
         <View style={styles.card}>
@@ -305,7 +311,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warningDim,
     borderColor: 'rgba(245,158,11,0.4)',
   },
-  alertText: { color: '#fca5a5', fontSize: 13 },
+  alertText: { color: Colors.danger, fontSize: 13 },
   saveBtn: {
     backgroundColor: Colors.primaryDim,
     borderWidth: 1,

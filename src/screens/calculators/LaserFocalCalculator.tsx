@@ -10,8 +10,9 @@ import {
   View, Text, ScrollView, StyleSheet, SafeAreaView,
   TouchableOpacity, TextInput,
 } from 'react-native';
-import { Colors, Spacing, Typography, Radius } from '../../lib/theme';
+import { Colors, Spacing, Radius } from '../../lib/theme';
 import ResultBox from '../../components/ResultBox';
+import InfoBox from '../../components/InfoBox';
 
 // Common lens presets (focal length mm, label)
 interface LensPreset {
@@ -123,6 +124,11 @@ export default function LaserFocalCalculator() {
           <Text style={s.title}>Laser Focal Calculator</Text>
           <Text style={s.subtitle}>Spot size, depth of focus, kerf width</Text>
         </View>
+
+        {/* Help */}
+        <InfoBox
+          body={"Computes focused spot parameters using Gaussian beam optics.\n\nSpot diameter = 2 × (wavelength × focal_length) / (π × beam_diameter)\n\nFibre lasers (1064nm) achieve ~10× smaller spots than CO₂ (10600nm) for the same lens.\n\nDepth of focus = 2 × Rayleigh range. For thick material, use longer focal length for adequate DOF."}
+        />
 
         {/* Laser type */}
         <View style={s.card}>
@@ -282,94 +288,83 @@ export default function LaserFocalCalculator() {
   );
 }
 
-// Reuse spacing/etc from theme
-const Spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 40 };
-const Radius = { sm: 8, md: 12, lg: 16, full: 999 };
-const Typography = {
-  heading: { fontWeight: '700' as const, fontSize: 20 },
-  subheading: { fontWeight: '600' as const, fontSize: 16 },
-  body: { fontSize: 14 },
-  label: { fontSize: 13, fontWeight: '500' as const },
-  caption: { fontSize: 12 },
-};
-
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#0a0f1a' },
-  scroll: { flex: 1, padding: 16 },
-  header: { marginBottom: 16 },
-  title: { fontWeight: '700', fontSize: 22, color: '#00d4ff' },
-  subtitle: { fontSize: 14, color: '#94a3b8', marginTop: 2 },
+  safe: { flex: 1, backgroundColor: Colors.bg },
+  scroll: { flex: 1, padding: Spacing.md },
+  header: { marginBottom: Spacing.md },
+  title: { fontWeight: '700', fontSize: 22, color: Colors.primary },
+  subtitle: { fontSize: 14, color: Colors.textSecondary, marginTop: 2 },
   card: {
-    backgroundColor: '#0f1623',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 8,
+    backgroundColor: Colors.bgCard,
+    borderRadius: Radius.lg,
+    padding: Spacing.md,
+    marginBottom: Spacing.sm,
     borderWidth: 1,
-    borderColor: 'rgba(0,212,255,0.1)',
+    borderColor: Colors.primaryBorder,
   },
-  sectionTitle: { fontWeight: '600', fontSize: 16, color: '#e2e8f0', marginBottom: 8 },
-  label: { fontSize: 13, color: '#94a3b8', marginBottom: 4, marginTop: 8 },
+  sectionTitle: { fontWeight: '600', fontSize: 16, color: Colors.textPrimary, marginBottom: Spacing.sm },
+  label: { fontSize: 13, color: Colors.textSecondary, marginBottom: 4, marginTop: Spacing.sm },
   input: {
-    backgroundColor: '#0d1520',
-    borderRadius: 8,
+    backgroundColor: Colors.bgInput,
+    borderRadius: Radius.sm,
     borderWidth: 1,
-    borderColor: 'rgba(148,163,184,0.2)',
-    color: '#e2e8f0',
+    borderColor: Colors.border,
+    color: Colors.textPrimary,
     padding: 10,
     fontSize: 16,
     minHeight: 44,
   },
-  typeRow: { flexDirection: 'row', gap: 8 },
+  typeRow: { flexDirection: 'row' as const, gap: Spacing.sm },
   typeBtn: {
     flex: 1,
-    padding: 12,
-    borderRadius: 8,
+    padding: Spacing.sm + 4,
+    borderRadius: Radius.sm,
     borderWidth: 1,
-    borderColor: 'rgba(148,163,184,0.2)',
-    backgroundColor: '#0d1520',
-    alignItems: 'center',
+    borderColor: Colors.border,
+    backgroundColor: Colors.bgInput,
+    alignItems: 'center' as const,
   },
-  typeBtnActive: { backgroundColor: 'rgba(0,212,255,0.15)', borderColor: '#00d4ff' },
-  typeBtnText: { color: '#94a3b8', fontSize: 13, fontWeight: '500' },
-  typeBtnTextActive: { color: '#00d4ff', fontWeight: '700' },
+  typeBtnActive: { backgroundColor: Colors.primaryDim, borderColor: Colors.primary },
+  typeBtnText: { color: Colors.textSecondary, fontSize: 13, fontWeight: '500' as const },
+  typeBtnTextActive: { color: Colors.primary, fontWeight: '700' as const },
   chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 999,
+    paddingHorizontal: Spacing.sm + 6,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.pill,
     borderWidth: 1,
-    borderColor: 'rgba(148,163,184,0.2)',
+    borderColor: Colors.border,
     marginRight: 6,
-    backgroundColor: '#0d1520',
+    backgroundColor: Colors.bgInput,
   },
-  chipActive: { backgroundColor: 'rgba(0,212,255,0.15)', borderColor: '#00d4ff' },
-  chipText: { color: '#94a3b8', fontSize: 13 },
-  chipTextActive: { color: '#00d4ff', fontWeight: '600' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
+  chipActive: { backgroundColor: Colors.primaryDim, borderColor: Colors.primary },
+  chipText: { color: Colors.textSecondary, fontSize: 13 },
+  chipTextActive: { color: Colors.primary, fontWeight: '600' as const },
+  grid: { flexDirection: 'row' as const, flexWrap: 'wrap' as const, gap: Spacing.sm, marginTop: Spacing.sm + 4 },
   metric: {
     width: '47%',
-    backgroundColor: '#0d1520',
-    borderRadius: 8,
+    backgroundColor: Colors.bgInput,
+    borderRadius: Radius.sm,
     padding: 10,
-    alignItems: 'center',
+    alignItems: 'center' as const,
   },
-  metricLabel: { fontSize: 11, color: '#94a3b8', textAlign: 'center' },
-  metricValue: { fontSize: 16, fontWeight: '600', color: '#e2e8f0', marginTop: 2 },
+  metricLabel: { fontSize: 11, color: Colors.textSecondary, textAlign: 'center' as const },
+  metricValue: { fontSize: 16, fontWeight: '600' as const, color: Colors.textPrimary, marginTop: 2 },
   infoBox: {
-    backgroundColor: 'rgba(0,212,255,0.08)',
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 12,
+    backgroundColor: Colors.primaryDim,
+    borderRadius: Radius.sm,
+    padding: Spacing.sm + 4,
+    marginTop: Spacing.sm + 4,
     borderWidth: 1,
-    borderColor: 'rgba(0,212,255,0.2)',
+    borderColor: Colors.primaryBorder,
   },
-  infoTitle: { fontSize: 13, fontWeight: '600', color: '#00d4ff', marginBottom: 4 },
-  infoText: { fontSize: 13, color: '#94a3b8', lineHeight: 20 },
-  emptyText: { color: '#475569', textAlign: 'center', paddingVertical: 16 },
-  expandBtn: { padding: 8, alignItems: 'center', marginBottom: 4 },
-  expandBtnText: { color: '#94a3b8', fontSize: 13 },
-  tableRow: { flexDirection: 'row', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: 'rgba(148,163,184,0.1)' },
-  tableCell: { flex: 1, color: '#e2e8f0', fontSize: 12 },
-  tableHeader: { fontWeight: '700', color: '#00d4ff' },
-  footer: { padding: 16, alignItems: 'center', marginBottom: 40 },
-  footerText: { color: '#475569', fontSize: 11, textAlign: 'center' },
+  infoTitle: { fontSize: 13, fontWeight: '600' as const, color: Colors.primary, marginBottom: 4 },
+  infoText: { fontSize: 13, color: Colors.textSecondary, lineHeight: 20 },
+  emptyText: { color: Colors.textMuted, textAlign: 'center' as const, paddingVertical: Spacing.md },
+  expandBtn: { padding: Spacing.sm, alignItems: 'center' as const, marginBottom: 4 },
+  expandBtnText: { color: Colors.textSecondary, fontSize: 13 },
+  tableRow: { flexDirection: 'row' as const, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: Colors.border },
+  tableCell: { flex: 1, color: Colors.textPrimary, fontSize: 12 },
+  tableHeader: { fontWeight: '700' as const, color: Colors.primary },
+  footer: { padding: Spacing.md, alignItems: 'center' as const, marginBottom: 40 },
+  footerText: { color: Colors.textMuted, fontSize: 11, textAlign: 'center' as const },
 });

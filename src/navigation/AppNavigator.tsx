@@ -25,6 +25,11 @@ import MotorVFDCalculator from '../screens/calculators/MotorVFDCalculator';
 import CNCFeedSpeedCalculator from '../screens/calculators/CNCFeedSpeedCalculator';
 import PunchTonnageCalculator from '../screens/calculators/PunchTonnageCalculator';
 
+// Calculator screens — sheet metal / laser
+import PressBrakeTonnageCalculator from '../screens/calculators/PressBrakeTonnageCalculator';
+import LaserFocalCalculator from '../screens/calculators/LaserFocalCalculator';
+import BendAllowanceCalculator from '../screens/calculators/BendAllowanceCalculator';
+
 // Placeholder screens for upcoming calculators
 import { ComingSoonScreen } from '../screens/ComingSoonScreen';
 
@@ -87,17 +92,17 @@ function CalculatorsStack() {
       />
       <Stack.Screen
         name="PressBrakeCalculator"
-        children={(props) => <ComingSoonScreen {...props} title="Press Brake Calculator" emoji="📐" />}
-        options={{ title: '📐 Press Brake' }}
+        component={PressBrakeTonnageCalculator}
+        options={{ title: '📐 Press Brake Tonnage' }}
       />
       <Stack.Screen
         name="LaserFocalCalculator"
-        children={(props) => <ComingSoonScreen {...props} title="Laser Focal Point Calculator" emoji="🔴" />}
-        options={{ title: '🔴 Laser Focal' }}
+        component={LaserFocalCalculator}
+        options={{ title: '🔴 Laser Focal Point' }}
       />
       <Stack.Screen
         name="BendAllowanceCalculator"
-        children={(props) => <ComingSoonScreen {...props} title="Bend Allowance & K-Factor" emoji="📏" />}
+        component={BendAllowanceCalculator}
         options={{ title: '📏 Bend Allowance' }}
       />
       <Stack.Screen

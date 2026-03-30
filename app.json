@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "ForgeTools",
+    "slug": "forgetools",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0f1a"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.forgebyteai.forgetools"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0f1a"
+      },
+      "package": "com.forgebyteai.forgetools",
+      "versionCode": 1,
+      "permissions": []
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "forgetools",
+    "extra": {
+      "eas": {
+        "projectId": "CONFIGURE_IN_EAS_CLI"
+      }
+    }
+  }
+}

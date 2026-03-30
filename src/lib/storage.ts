@@ -54,3 +54,13 @@ export async function getRecents(): Promise<SavedCalc[]> {
 export async function clearAll(): Promise<void> {
   await AsyncStorage.multiRemove([KEYS.favourites, KEYS.recents]);
 }
+
+// Generic key-value helpers used by individual calculator screens
+export async function saveItem<T>(key: string, value: T): Promise<void> {
+  await AsyncStorage.setItem(`@forgetools:${key}`, JSON.stringify(value));
+}
+
+export async function loadItem<T>(key: string): Promise<T | null> {
+  const raw = await AsyncStorage.getItem(`@forgetools:${key}`);
+  return raw ? (JSON.parse(raw) as T) : null;
+}

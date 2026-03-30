@@ -1,14 +1,17 @@
 /**
  * ForgeTools — Home Screen
  * Grid of calculator categories with card navigation.
+ * Cards animate in with a stagger entrance on mount.
  */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView,
+  Animated, Easing,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Colors, Spacing, Typography, Radius } from '../lib/theme';
+import { usePressScale } from '../lib/animations';
 
 interface CalcCard {
   id: string;
@@ -40,17 +43,116 @@ const CATEGORIES = [
   { id: 'general',     label: '🔄 General' },
 ];
 
+// ─── Animated Card ──────────────────────────────────────────────
+function CalcCardItem({
+  card,
+  onPress,
+  animOpacity,
+  animY,
+}: {
+  card: CalcCard;
+  onPress: () => void;
+  animOpacity: Animated.Value;
+  animY: Animated.Value;
+}) {
+  const { scale, onPressIn, onPressOut } = usePressScale(0.93);
+
+  return (
+    <Animated.View
+      style={[
+        styles.cardWrap,
+        { opacity: animOpacity, transform: [{ translateY: animY }] },
+      ]}
+    >
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={1}
+          onPress={onPress}
+          onPressIn={onPressIn}
+          onPressOut={onPressOut}
+          accessibilityLabel={`${card.title} calculator`}
+          accessibilityRole="button"
+        >
+          <Text style={styles.cardEmoji}>{card.emoji}</Text>
+          <Text style={styles.cardTitle}>{card.title}</Text>
+          <Text style={styles.cardSub}>{card.subtitle}</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </Animated.View>
+  );
+}
+
+// ─── Main Screen ─────────────────────────────────────────────────
 export default function HomeScreen() {
   const nav = useNavigation<any>();
 
+  // Build per-card animation values
+  const cardAnims = useRef(
+    CALCULATORS.map(() => ({
+      opacity: new Animated.Value(0),
+      y: new Animated.Value(14),
+    }))
+  ).current;
+
+  // Header entrance
+  const headerOpacity = useRef(new Animated.Value(0)).current;
+  const headerY       = useRef(new Animated.Value(-10)).current;
+
+  useEffect(() => {
+    // Header first
+    Animated.parallel([
+      Animated.timing(headerOpacity, {
+        toValue: 1,
+        duration: 260,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(headerY, {
+        toValue: 0,
+        duration: 260,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Cards stagger after header
+    const staggerAnims = cardAnims.map((anim, i) =>
+      Animated.parallel([
+        Animated.timing(anim.opacity, {
+          toValue: 1,
+          duration: 220,
+          delay: 120 + i * 45,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim.y, {
+          toValue: 0,
+          duration: 220,
+          delay: 120 + i * 45,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    Animated.parallel(staggerAnims).start();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.header}>
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+
+        {/* Animated header */}
+        <Animated.View
+          style={[
+            styles.header,
+            { opacity: headerOpacity, transform: [{ translateY: headerY }] },
+          ]}
+        >
           <Text style={styles.brand}>⚡ ForgeCore</Text>
           <Text style={styles.title}>Engineering Tools</Text>
           <Text style={styles.subtitle}>Offline calculators for the workshop floor</Text>
-        </View>
+        </Animated.View>
 
         {CATEGORIES.map(cat => {
           const cards = CALCULATORS.filter(c => c.category === cat.id);
@@ -58,20 +160,18 @@ export default function HomeScreen() {
             <View key={cat.id} style={styles.section}>
               <Text style={styles.sectionTitle}>{cat.label}</Text>
               <View style={styles.grid}>
-                {cards.map(card => (
-                  <TouchableOpacity
-                    key={card.id}
-                    style={styles.card}
-                    activeOpacity={0.7}
-                    onPress={() => nav.navigate(card.screen)}
-                    accessibilityLabel={`${card.title} calculator`}
-                    accessibilityRole="button"
-                  >
-                    <Text style={styles.cardEmoji}>{card.emoji}</Text>
-                    <Text style={styles.cardTitle}>{card.title}</Text>
-                    <Text style={styles.cardSub}>{card.subtitle}</Text>
-                  </TouchableOpacity>
-                ))}
+                {cards.map(card => {
+                  const idx = CALCULATORS.indexOf(card);
+                  return (
+                    <CalcCardItem
+                      key={card.id}
+                      card={card}
+                      onPress={() => nav.navigate(card.screen)}
+                      animOpacity={cardAnims[idx].opacity}
+                      animY={cardAnims[idx].y}
+                    />
+                  );
+                })}
               </View>
             </View>
           );
@@ -104,8 +204,8 @@ const styles = StyleSheet.create({
   section: { marginBottom: Spacing.lg },
   sectionTitle: { ...Typography.h3, color: Colors.textSecondary, marginBottom: Spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
+  cardWrap: { width: '47%' },
   card: {
-    width: '47%',
     backgroundColor: Colors.bgCard,
     borderWidth: 1,
     borderColor: Colors.primaryBorder,

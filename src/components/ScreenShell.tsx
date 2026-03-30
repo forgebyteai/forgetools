@@ -1,11 +1,12 @@
 /**
  * ScreenShell — Standard screen wrapper for ForgeTools calculators.
  * Provides consistent safe area, scroll container, and header styling.
+ * Animates the header in with a fade+slide on mount.
  */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  SafeAreaView, ScrollView, View, Text, StyleSheet,
+  SafeAreaView, ScrollView, View, Text, StyleSheet, Animated, Easing,
 } from 'react-native';
 import { Colors, Spacing, Radius } from '../lib/theme';
 
@@ -17,6 +18,49 @@ interface Props {
 }
 
 export default function ScreenShell({ emoji, title, subtitle, children }: Props) {
+  // Header entrance animation
+  const headerOpacity = useRef(new Animated.Value(0)).current;
+  const headerY       = useRef(new Animated.Value(-8)).current;
+  // Content entrance animation (slightly delayed)
+  const contentOpacity = useRef(new Animated.Value(0)).current;
+  const contentY       = useRef(new Animated.Value(10)).current;
+
+  useEffect(() => {
+    // Header: fast fade-in slide down
+    Animated.parallel([
+      Animated.timing(headerOpacity, {
+        toValue: 1,
+        duration: 240,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(headerY, {
+        toValue: 0,
+        duration: 240,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Content: slightly delayed so header lands first
+    Animated.parallel([
+      Animated.timing(contentOpacity, {
+        toValue: 1,
+        duration: 260,
+        delay: 80,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(contentY, {
+        toValue: 0,
+        duration: 260,
+        delay: 80,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView
@@ -24,14 +68,24 @@ export default function ScreenShell({ emoji, title, subtitle, children }: Props)
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Consistent header */}
-        <View style={styles.header}>
+        {/* Animated header */}
+        <Animated.View
+          style={[
+            styles.header,
+            { opacity: headerOpacity, transform: [{ translateY: headerY }] },
+          ]}
+        >
           <Text style={styles.icon}>{emoji}</Text>
           <Text style={styles.title}>{title}</Text>
           {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-        </View>
+        </Animated.View>
 
-        {children}
+        {/* Animated content */}
+        <Animated.View
+          style={{ opacity: contentOpacity, transform: [{ translateY: contentY }] }}
+        >
+          {children}
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );

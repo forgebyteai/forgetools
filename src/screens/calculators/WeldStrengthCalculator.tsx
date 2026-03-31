@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Spacing, Typography, Radius } from '../../lib/theme';
-import { ResultBox } from '../../components/ResultBox';
-import { InfoBox } from '../../components/InfoBox';
+import ResultBox from '../../components/ResultBox';
+import InfoBox from '../../components/InfoBox';
 
 // ── Data ───────────────────────────────────────────────────────────────────
 
@@ -134,14 +134,14 @@ export default function WeldStrengthCalculator() {
         </View>
 
         {/* Material / electrode */}
-        <ChipPicker label="Base Material" values={Object.keys(MATERIALS)} selected={material} onSelect={setMaterial} />
-        <ChipPicker label="Electrode / Filler" values={Object.keys(ELECTRODES)} selected={electrode} onSelect={setElectrode} />
-        <ChipPicker label="Weld Length (mm)" values={LEN_OPTS} selected={weldLen} onSelect={setWeldLen} />
+        <ChipPicker label="Base Material" values={Object.keys(MATERIALS)} selected={material} onSelect={(v: string) => setMaterial(v)} />
+        <ChipPicker label="Electrode / Filler" values={Object.keys(ELECTRODES)} selected={electrode} onSelect={(v: string) => setElectrode(v)} />
+        <ChipPicker label="Weld Length (mm)" values={LEN_OPTS} selected={weldLen} onSelect={(v: number) => setWeldLen(v)} />
 
         {/* Joint-specific inputs */}
         {jointType === 'fillet' && (
           <>
-            <ChipPicker label="Leg Size (mm)" values={LEG_OPTS} selected={legSize} onSelect={setLegSize} />
+            <ChipPicker label="Leg Size (mm)" values={LEG_OPTS} selected={legSize} onSelect={(v: number) => setLegSize(v)} />
             <View style={styles.pickerGroup}>
               <Text style={styles.pickerLabel}>Load Direction</Text>
               <View style={styles.chipRow}>
@@ -157,13 +157,13 @@ export default function WeldStrengthCalculator() {
           </>
         )}
         {jointType === 'full-butt' && (
-          <ChipPicker label="Plate Thickness (mm)" values={THICK_OPTS} selected={thickness} onSelect={setThickness} />
+          <ChipPicker label="Plate Thickness (mm)" values={THICK_OPTS} selected={thickness} onSelect={(v: number) => setThickness(v)} />
         )}
         {jointType === 'partial-butt' && (
-          <ChipPicker label="Effective Throat (mm)" values={LEG_OPTS} selected={throat} onSelect={setThroat} />
+          <ChipPicker label="Effective Throat (mm)" values={LEG_OPTS} selected={throat} onSelect={(v: number) => setThroat(v)} />
         )}
 
-        <ChipPicker label="Safety Factor" values={SF_OPTS} selected={sf} onSelect={setSf} format={v => `×${v}`} />
+        <ChipPicker label="Safety Factor" values={SF_OPTS} selected={sf} onSelect={(v: number) => setSf(v)} format={v => `×${v}`} />
 
         {/* Results */}
         <View style={styles.section}>

@@ -36,6 +36,10 @@ import HydraulicCylinderCalculator from '../screens/calculators/HydraulicCylinde
 import ThreadTapDrillCalculator from '../screens/calculators/ThreadTapDrillCalculator';
 import WeldStrengthCalculator from '../screens/calculators/WeldStrengthCalculator';
 
+// Calculator screens — WFD-284, WFD-285
+import BearingSelectionCalculator from '../screens/calculators/BearingSelectionCalculator';
+import ThermalExpansionCalculator from '../screens/calculators/ThermalExpansionCalculator';
+
 // Placeholder screens for upcoming calculators
 import { ComingSoonScreen } from '../screens/ComingSoonScreen';
 
@@ -136,6 +140,18 @@ function CalculatorsStack() {
         name="WeldStrengthCalculator"
         component={WeldStrengthCalculator}
         options={{ title: '🔥 Weld Strength' }}
+      />
+      {/* WFD-284 */}
+      <Stack.Screen
+        name="BearingSelectionCalculator"
+        component={BearingSelectionCalculator}
+        options={{ title: '🔵 Bearing Selection' }}
+      />
+      {/* WFD-285 */}
+      <Stack.Screen
+        name="ThermalExpansionCalculator"
+        component={ThermalExpansionCalculator}
+        options={{ title: '🌡️ Thermal Expansion' }}
       />
     </Stack.Navigator>
   );

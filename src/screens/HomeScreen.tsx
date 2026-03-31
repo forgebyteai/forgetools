@@ -38,6 +38,8 @@ const CALCULATORS: CalcCard[] = [
   { id: 'hydraulic',      emoji: '💧', title: 'Hydraulic Cylinder',   subtitle: 'Force, speed, flow',    screen: 'HydraulicCylinderCalculator', category: 'engineering' },
   { id: 'thread-tap',     emoji: '🔩', title: 'Thread & Tap Drill',   subtitle: 'Metric, UNC, UNF, BSP', screen: 'ThreadTapDrillCalculator',    category: 'engineering' },
   { id: 'weld-strength',  emoji: '🔥', title: 'Weld Strength',        subtitle: 'Fillet & butt welds',   screen: 'WeldStrengthCalculator',      category: 'engineering' },
+  { id: 'bearing',        emoji: '🔵', title: 'Bearing Selection',    subtitle: 'Type, number decoder',  screen: 'BearingSelectionCalculator',  category: 'engineering' },
+  { id: 'thermal',        emoji: '🌡️', title: 'Thermal Expansion',   subtitle: 'ΔL for temp change',    screen: 'ThermalExpansionCalculator',  category: 'engineering' },
 ];
 
 const CATEGORIES = [

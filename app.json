@@ -15,7 +15,9 @@
       "backgroundColor": "#0a0f1a",
       "barStyle": "light-content"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.forgebyteai.forgetools"
@@ -37,9 +39,13 @@
     ],
     "scheme": "forgetools",
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
-        "projectId": "CONFIGURE_IN_EAS_CLI"
+        "projectId": "a930e59a-161b-4cdf-93e9-afd28c1f433e"
       }
-    }
+    },
+    "owner": "forgebyteai"
   }
 }

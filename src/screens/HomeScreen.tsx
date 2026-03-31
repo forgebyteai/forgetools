@@ -19,7 +19,7 @@ interface CalcCard {
   title: string;
   subtitle: string;
   screen: string;
-  category: 'electrical' | 'cnc' | 'sheet-metal' | 'general';
+  category: 'electrical' | 'cnc' | 'sheet-metal' | 'engineering' | 'general';
 }
 
 const CALCULATORS: CalcCard[] = [
@@ -34,12 +34,17 @@ const CALCULATORS: CalcCard[] = [
   { id: 'laser-focal',    emoji: '🔴', title: 'Laser Focal Point',    subtitle: 'CO₂ & fibre',           screen: 'LaserFocalCalculator',   category: 'sheet-metal' },
   { id: 'bend-allowance', emoji: '📏', title: 'Bend Allowance',       subtitle: 'K-factor, flat length', screen: 'BendAllowanceCalculator',category: 'sheet-metal' },
   { id: 'units',          emoji: '🔄', title: 'Unit Converter',       subtitle: 'P, T, L, torque, flow', screen: 'UnitConverter',          category: 'general' },
+  { id: 'pneumatic',      emoji: '💨', title: 'Pneumatic Cylinder',   subtitle: 'Extend/retract force',  screen: 'PneumaticCylinderCalculator', category: 'engineering' },
+  { id: 'hydraulic',      emoji: '💧', title: 'Hydraulic Cylinder',   subtitle: 'Force, speed, flow',    screen: 'HydraulicCylinderCalculator', category: 'engineering' },
+  { id: 'thread-tap',     emoji: '🔩', title: 'Thread & Tap Drill',   subtitle: 'Metric, UNC, UNF, BSP', screen: 'ThreadTapDrillCalculator',    category: 'engineering' },
+  { id: 'weld-strength',  emoji: '🔥', title: 'Weld Strength',        subtitle: 'Fillet & butt welds',   screen: 'WeldStrengthCalculator',      category: 'engineering' },
 ];
 
 const CATEGORIES = [
   { id: 'electrical',  label: '⚡ Electrical' },
   { id: 'cnc',         label: '🔩 CNC' },
   { id: 'sheet-metal', label: '📐 Sheet Metal' },
+  { id: 'engineering', label: '⚙️ Engineering' },
   { id: 'general',     label: '🔄 General' },
 ];
 

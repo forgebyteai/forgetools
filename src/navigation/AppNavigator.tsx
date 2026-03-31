@@ -30,6 +30,12 @@ import PressBrakeTonnageCalculator from '../screens/calculators/PressBrakeTonnag
 import LaserFocalCalculator from '../screens/calculators/LaserFocalCalculator';
 import BendAllowanceCalculator from '../screens/calculators/BendAllowanceCalculator';
 
+// Calculator screens — mechanical / engineering (WFD-280)
+import PneumaticCylinderCalculator from '../screens/calculators/PneumaticCylinderCalculator';
+import HydraulicCylinderCalculator from '../screens/calculators/HydraulicCylinderCalculator';
+import ThreadTapDrillCalculator from '../screens/calculators/ThreadTapDrillCalculator';
+import WeldStrengthCalculator from '../screens/calculators/WeldStrengthCalculator';
+
 // Placeholder screens for upcoming calculators
 import { ComingSoonScreen } from '../screens/ComingSoonScreen';
 
@@ -109,6 +115,27 @@ function CalculatorsStack() {
         name="UnitConverter"
         component={ConvertersScreen}
         options={{ title: '🔄 Unit Converter' }}
+      />
+      {/* Engineering calculators — WFD-280 */}
+      <Stack.Screen
+        name="PneumaticCylinderCalculator"
+        component={PneumaticCylinderCalculator}
+        options={{ title: '💨 Pneumatic Cylinder' }}
+      />
+      <Stack.Screen
+        name="HydraulicCylinderCalculator"
+        component={HydraulicCylinderCalculator}
+        options={{ title: '💧 Hydraulic Cylinder' }}
+      />
+      <Stack.Screen
+        name="ThreadTapDrillCalculator"
+        component={ThreadTapDrillCalculator}
+        options={{ title: '🔩 Thread & Tap Drill' }}
+      />
+      <Stack.Screen
+        name="WeldStrengthCalculator"
+        component={WeldStrengthCalculator}
+        options={{ title: '🔥 Weld Strength' }}
       />
     </Stack.Navigator>
   );

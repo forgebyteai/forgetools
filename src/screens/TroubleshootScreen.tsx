@@ -1,6 +1,6 @@
 /**
- * ForgeTools — Troubleshoot Screen (WFD-250)
- * Expandable decision trees for common field issues.
+ * ForgeTools — Troubleshoot Screen (WFD-250, WFD-279)
+ * Expandable decision trees + PixelFlowchart interactive diagrams.
  * Motor, VFD, PLC, Hydraulic fault trees. Searchable + bookmarkable.
  * THE killer feature for field service — works 100% offline.
  */
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Spacing, Typography, Radius } from '../lib/theme';
+import { PixelFlowchart, FlowchartSelector, FLOWCHARTS, FlowchartDef } from '../components/PixelFlowchart';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -658,6 +659,8 @@ export default function TroubleshootScreen() {
   const [selectedCat, setSelectedCat] = useState('All');
   const [activeGuide, setActiveGuide] = useState<TroubleGuide | null>(null);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [viewMode, setViewMode] = useState<'text' | 'flowchart'>('text');
+  const [activeFlowchart, setActiveFlowchart] = useState<FlowchartDef | null>(null);
 
   // Load bookmarks on mount
   React.useEffect(() => {
@@ -705,9 +708,57 @@ export default function TroubleshootScreen() {
     );
   }
 
+  // ── Flowchart mode ───────────────────────────────────────────────────────
+  if (viewMode === 'flowchart') {
+    if (activeFlowchart) {
+      return (
+        <SafeAreaView style={styles.safe}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <TouchableOpacity style={styles.backHeader} onPress={() => setActiveFlowchart(null)}>
+              <Text style={styles.backHeaderText}>← Back to flowcharts</Text>
+            </TouchableOpacity>
+            <PixelFlowchart flowchart={activeFlowchart} onBack={() => setActiveFlowchart(null)} />
+            <View style={styles.offlineBadge}>
+              <Text style={styles.offlineBadgeText}>📴 Offline — works without internet</Text>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      );
+    }
+    return (
+      <SafeAreaView style={styles.safe}>
+        <ScrollView contentContainerStyle={styles.scroll}>
+          {/* Mode toggle */}
+          <View style={styles.modeRow}>
+            <TouchableOpacity style={[styles.modeBtn, styles.modeBtnInactive]} onPress={() => setViewMode('text')}>
+              <Text style={styles.modeBtnText}>📋 Text Guide</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.modeBtn, styles.modeBtnActive]}>
+              <Text style={[styles.modeBtnText, styles.modeBtnTextActive]}>🎮 Flowchart</Text>
+            </TouchableOpacity>
+          </View>
+          <FlowchartSelector onSelect={fc => setActiveFlowchart(fc)} />
+          <View style={styles.offlineBadge}>
+            <Text style={styles.offlineBadgeText}>📴 All flowcharts work offline</Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
+        {/* Mode toggle */}
+        <View style={styles.modeRow}>
+          <TouchableOpacity style={[styles.modeBtn, styles.modeBtnActive]}>
+            <Text style={[styles.modeBtnText, styles.modeBtnTextActive]}>📋 Text Guide</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.modeBtn, styles.modeBtnInactive]} onPress={() => setViewMode('flowchart')}>
+            <Text style={styles.modeBtnText}>🎮 Flowchart</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Search */}
         <View style={styles.searchWrap}>
           <TextInput
@@ -783,6 +834,12 @@ export default function TroubleshootScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bg },
+  modeRow: { flexDirection: 'row', gap: Spacing.sm, marginBottom: Spacing.md },
+  modeBtn: { flex: 1, padding: Spacing.sm, borderRadius: Radius.md, alignItems: 'center', borderWidth: 1 },
+  modeBtnActive:   { backgroundColor: Colors.primaryDim, borderColor: Colors.primaryBorder },
+  modeBtnInactive: { backgroundColor: Colors.cardBg, borderColor: Colors.border },
+  modeBtnText: { fontWeight: '600', fontSize: 13, color: Colors.textMuted },
+  modeBtnTextActive: { color: Colors.primary },
   scroll: { padding: Spacing.md, paddingBottom: Spacing.xxl },
   searchWrap: { marginBottom: Spacing.sm },
   search: {
